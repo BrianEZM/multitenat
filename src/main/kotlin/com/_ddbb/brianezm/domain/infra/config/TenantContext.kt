@@ -1,11 +1,17 @@
 package com._ddbb.brianezm.domain.infra.config
 
 object TenantContext {
-    private val currentTenant = ThreadLocal.withInitial { "master" }
+    private val currentTenant = ThreadLocal<String>()
 
-    fun getCurrentTenant(): String = currentTenant.get()
+    fun setCurrentTenant(tenant: String) {
+        currentTenant.set(tenant)
+    }
 
-    fun setCurrentTenant(tenant: String) = currentTenant.set(tenant)
+    fun getCurrentTenant(): String? {
+        return currentTenant.get()
+    }
 
-    fun clear() = currentTenant.remove()
+    fun clear() {
+        currentTenant.remove()
+    }
 }
