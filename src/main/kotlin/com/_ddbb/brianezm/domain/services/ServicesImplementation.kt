@@ -11,13 +11,13 @@ class ServicesImplementation(
     private val repositoryTicket: TicketRepository
 ) : Services {
 
-    @Tenant("read-only")
+    @Tenant("master")
     override fun readTk(): List<Ticket> {
         val list = repositoryTicket.findAll()
         return list
     }
 
-    @Tenant("master")
+    @Tenant("read-only")
     override fun addTk(tk: Ticket) {
         repositoryTicket.save(tk)
     }

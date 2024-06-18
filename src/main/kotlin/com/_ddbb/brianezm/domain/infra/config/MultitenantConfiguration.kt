@@ -9,7 +9,7 @@ import org.springframework.jdbc.datasource.lookup.AbstractRoutingDataSource
 
 @Configuration
 class MultitenantConfiguration(
-    @Value("\${spring.tenant.default}") private val defaultTenant: String,
+    @Value("\${defaultTenant}") private val defaultTenant: String,
     private val environment: Environment
 ) {
 
