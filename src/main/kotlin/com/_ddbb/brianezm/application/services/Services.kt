@@ -6,6 +6,6 @@ interface Services {
 
     fun addTk(tk: Ticket)
 
-    fun readTk(): Collection<Ticket>
+    fun readTk(): List<Ticket>
 
 }

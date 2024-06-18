@@ -2,7 +2,6 @@ package com._ddbb.brianezm.application.controller
 
 import com._ddbb.brianezm.application.services.Services
 import com._ddbb.brianezm.domain.models.t1.Ticket
-import com._ddbb.brianezm.domain.repository.MasterRepo.MasterDDBB
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PostMapping
@@ -10,12 +9,12 @@ import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.RestController
 
 @RestController
-class ControllerDB1(
+class ControllerDB(
     private val serv: Services
 ) {
 
     @GetMapping("/list")
-    fun listAll(): ResponseEntity<Collection<Ticket>> {
+    fun listAll(): ResponseEntity<List<Ticket>> {
         val list = serv.readTk()
         return ResponseEntity.ok(list)
     }
