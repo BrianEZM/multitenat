@@ -4,22 +4,23 @@ import org.aspectj.lang.JoinPoint
 import org.aspectj.lang.annotation.After
 import org.aspectj.lang.annotation.Aspect
 import org.aspectj.lang.annotation.Before
+import org.springframework.core.annotation.Order
 import org.springframework.stereotype.Component
 
+@Order(1)
 @Aspect
 @Component
 class TenantDataSourceAspect {
 
-    @Before("@annotation(com._ddbb.brianezm.domain.infra.config.Tenant)") // Punto de corte antes de métodos anotados con @Tenant
-    fun before(joinPoint: JoinPoint) {
-        val args = joinPoint.args // Obtiene los argumentos del método
-        val tenantId = args.firstOrNull { it is Tenant }?.let { (it as Tenant).value }
-            ?: "master" // Extrae el valor del tenant del argumento anotado con @Tenant, si existe. Si no, usa "master" como valor por defecto.
-        TenantContext.setCurrentTenant(tenantId) // Establece el tenant en el contexto
+    @Before("@annotation(tenantAnnotation)")
+    fun before(joinPoint: JoinPoint, tenantAnnotation: Tenant) { // Inyectamos la anotación @Tenant directamente
+        val tenantId = tenantAnnotation.value  // Obtenemos el valor del tenant desde la anotación
+        TenantContext.setCurrentTenant(tenantId)
+        println("(Desde TenantDataSourceAspect) Tenant establecido en TenantContext: $tenantId") // Log para depuración
     }
 
-    @After("@annotation(com._ddbb.brianezm.domain.infra.config.Tenant)") // Punto de corte después de métodos anotados con @Tenant
+    @After("@annotation(tenantAnnotation)") // Aseguramos que el contexto se limpie después de cada método anotado
     fun after() {
-        TenantContext.clear() // Limpia el contexto después de la ejecución del método
+        TenantContext.clear()
     }
 }
