@@ -4,6 +4,7 @@ import org.aspectj.lang.JoinPoint
 import org.aspectj.lang.annotation.After
 import org.aspectj.lang.annotation.Aspect
 import org.aspectj.lang.annotation.Before
+import org.aspectj.lang.reflect.MethodSignature
 import org.springframework.core.annotation.Order
 import org.springframework.stereotype.Component
 
@@ -13,13 +14,12 @@ import org.springframework.stereotype.Component
 class TenantDataSourceAspect {
 
     @Before("@annotation(tenantAnnotation)")
-    fun before(joinPoint: JoinPoint, tenantAnnotation: Tenant) { // Inyectamos la anotación @Tenant directamente
-        val tenantId = tenantAnnotation.value  // Obtenemos el valor del tenant desde la anotación
+    fun before(joinPoint: JoinPoint, tenantAnnotation: Tenant) {
+        val tenantId = tenantAnnotation.value
         TenantContext.setCurrentTenant(tenantId)
-        println("(Desde TenantDataSourceAspect) Tenant establecido en TenantContext: $tenantId") // Log para depuración
     }
 
-    @After("@annotation(tenantAnnotation)") // Aseguramos que el contexto se limpie después de cada método anotado
+    @After("@annotation(tenantAnnotation)")
     fun after() {
         TenantContext.clear()
     }
